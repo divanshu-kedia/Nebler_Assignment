@@ -22,6 +22,13 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Nebler Prescription CRUD operation
+This task is for creating node API loosely based on FHIR (http://hl7.org/fhir/) which is a healthcare interoperability framework. A part of this API is a prescription resource that allows us to manage viewing and editing prescriptions.
+- Search for prescriptions based on a unique ID called “nhi”
+(https://www.health.govt.nz/our-work/health-identity/national-health-index)
+- Add a new prescription
+- Edit an existing prescription
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -51,11 +58,14 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
+```
+## API Reference
+
+The API documentation is available via Swagger UI. After starting the application, you can view the Swagger UI and interact with the API by navigating to:
+```bash
+http://localhost:3000/api/docs
 ```
 
 ## Support
