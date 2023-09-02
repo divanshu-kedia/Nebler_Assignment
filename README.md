@@ -29,10 +29,6 @@ This task is for creating node API loosely based on FHIR (http://hl7.org/fhir/) 
 - Add a new prescription
 - Edit an existing prescription
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
 
 ```bash
