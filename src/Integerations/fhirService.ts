@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-
+/* eslint-disable */
 /**
  * FhirService
  *

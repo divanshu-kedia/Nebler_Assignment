@@ -52,7 +52,7 @@ export class PrescriptionController {
     type: [CreatePrescriptionDto],
   })
   @UsePipes(ValidationPipe)
-  
+
   /**
    * This controller method is responsible for fetching the prescription data for a specific patient.
    * It receives the query parameters through GetPrescriptionDto.
