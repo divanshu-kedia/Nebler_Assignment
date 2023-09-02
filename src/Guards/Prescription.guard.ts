@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
 
 @Injectable()
 export class PrescriptionGuard implements CanActivate {

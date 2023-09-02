@@ -73,7 +73,7 @@ export class PrescriptionController {
   async searchPrescriptionsForPatient(@Query() queryData: GetPrescriptionDto) {
     try {
       // Fetches the prescription data for the patient based on the query parameters
-      let prescriptionData =
+      const prescriptionData =
         await this.prescriptionService.searchPrescriptionsForPatient(queryData);
       // Check if there are any prescriptions for the given NHI otherwise throw error
       if (!_.isEmpty(prescriptionData)) {
