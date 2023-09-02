@@ -147,7 +147,10 @@ export class PrescriptionController {
           prescriptionId,
           updatePrescriptionDTO,
         );
-      return updatedPrescription;
+      return {
+        message: 'Success',
+        data: updatedPrescription,
+      };
     } catch (_err) {
       throw new InternalServerErrorException(
         'An error occurred while updating the prescription.',
