@@ -68,9 +68,34 @@ The API documentation is available via Swagger UI. After starting the applicatio
 http://localhost:3000/api/docs
 ```
 
+## Important points:
+  ### How do we verify that the calls should be allowed?
+  
+  To ensure the security of our API, we implement both authentication and authorization mechanisms:
+  
+  #### Authentication
+  
+  Authentication verifies the identity of the user making the API call. Various methods can be used for authentication, such as:
+  
+  - **JWT (JSON Web Tokens):** A compact and self-contained method for securely transmitting information between parties as a JSON object.
+  
+  - **OAuth:** A protocol that allows users to grant limited access to their resources on one site, to another site, without having to expose their credentials.
+  
+  #### Authorization
+    Authorization is the process of granting or denying access to specific resources. With authorization, we can set up privileges to control which users have       access to which resources.
+  
+  ### What is the best strategy to keep our database and the external API in sync?
+    We can set up a daily cron job to retrieve patient prescription data from the external source. This job will import the data into our database, adding new       records as needed and updating existing ones if changes are detected at the source
+  ### How can we minimize the impact of changes in the external API on our system?
+   We can create an abstraction layer between the external API and your application. This layer will interact with the external API and normalize the data           before passing it to your application. If the API changes, we only need to update this layer. Also, we need to make our service loosely coupled with     
+    External API.
+  ### How do we test the system works as expected with good inputs and fails as expected with malicious inputs?
+  We can use testing utilities and libraries to ensure that your system behaves as expected with valid inputs and fails as expected with malicious inputs.
+  Every API will be guarded with the Input validator and we can write Unit Test cases to check all scenarios.
+
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Nest is an MIT-licensed open-source project. It can grow thanks to the sponsors and support of the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
