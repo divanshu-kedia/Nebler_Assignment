@@ -47,15 +47,15 @@ describe('MedicationRequestController', () => {
       expect(prescriptionController).not.toBeUndefined();
     });
   });
-  describe('getPrescriptionForPatient', () => {
+  describe('searchPrescriptionsForPatient', () => {
     it('should return a prescription', async () => {
       const result = { message: 'Success', data: [] };
       jest
-        .spyOn(prescriptionService, 'getPrescriptionForPatient')
+        .spyOn(prescriptionService, 'searchPrescriptionsForPatient')
         .mockImplementation(() => Promise.resolve([]));
 
       expect(
-        await prescriptionController.getPrescriptionForPatient(
+        await prescriptionController.searchPrescriptionsForPatient(
           new GetPrescriptionDto(),
         ),
       ).toEqual(result);
@@ -63,11 +63,11 @@ describe('MedicationRequestController', () => {
 
     it('should throw an error', async () => {
       jest
-        .spyOn(prescriptionService, 'getPrescriptionForPatient')
+        .spyOn(prescriptionService, 'searchPrescriptionsForPatient')
         .mockImplementation(() => Promise.reject());
 
       await expect(
-        prescriptionController.getPrescriptionForPatient(
+        prescriptionController.searchPrescriptionsForPatient(
           new GetPrescriptionDto(),
         ),
       ).rejects.toThrow(InternalServerErrorException);

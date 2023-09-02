@@ -10,4 +10,5 @@ export interface IPrescription {
       dosage: string;
     },
   ];
+  _id?: string;
 }

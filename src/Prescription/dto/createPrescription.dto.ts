@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsString,
   IsUUID,
+  IsOptional,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
@@ -54,4 +55,7 @@ export class CreatePrescriptionDto {
   @Type(() => Date)
   @Transform(({ value }) => new Date(value))
   readonly date: Date;
+
+  @IsOptional()
+  readonly _id?: string;
 }

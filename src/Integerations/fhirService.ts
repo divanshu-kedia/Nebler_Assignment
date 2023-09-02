@@ -70,4 +70,16 @@ export class FhirService {
     //   }),
     // );
   }
+
+  /**
+   * Update an existing medication  or create the medication request in the FHIR API.
+   *
+   * @param {Array<any>} medicationRequests - All Medication Request that we want to sync to third party
+   * @returns {Observable} - An Observable that will emit the response data when the HTTP request is successful.
+   * @throws {HttpException} - Throws an exception if an error occurs during the HTTP request.
+   */
+  createOrUpdateMedicationRequest(medicationRequests:Array<any>){
+    //here we will iterate the medicationRequest array and will update the medicationRequest record if not
+    //present in third party then we will create a record
+  }
 }
