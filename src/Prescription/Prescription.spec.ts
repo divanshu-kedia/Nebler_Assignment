@@ -2,12 +2,12 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { CreatePrescriptionDto } from './dto/createPrescription.dto';
-import { GetPrescriptionDto } from './dto/getPrescription.dto';
+import { SearchPrescriptionDTO } from './dto/searchPrescription.dto';
 import { IPrescription } from './Interfaces/prescription.interfaces';
 import { PrescriptionController } from './Prescription.controller';
 import { PrescriptionService } from './Prescription.service';
 
-describe('MedicationRequestController', () => {
+describe('Prescription Controller', () => {
   let prescriptionController: PrescriptionController;
   let prescriptionService: PrescriptionService;
   const createDto: CreatePrescriptionDto | IPrescription = {
@@ -47,28 +47,28 @@ describe('MedicationRequestController', () => {
       expect(prescriptionController).not.toBeUndefined();
     });
   });
-  describe('searchPrescriptionsForPatient', () => {
+  describe('searchPatientPrescriptions', () => {
     it('should return a prescription', async () => {
       const result = { message: 'Success', data: [] };
       jest
-        .spyOn(prescriptionService, 'searchPrescriptionsForPatient')
+        .spyOn(prescriptionService, 'searchPatientPrescriptions')
         .mockImplementation(() => Promise.resolve([]));
 
       expect(
-        await prescriptionController.searchPrescriptionsForPatient(
-          new GetPrescriptionDto(),
+        await prescriptionController.searchPatientPrescriptions(
+          new SearchPrescriptionDTO(),
         ),
       ).toEqual(result);
     });
 
     it('should throw an error', async () => {
       jest
-        .spyOn(prescriptionService, 'searchPrescriptionsForPatient')
+        .spyOn(prescriptionService, 'searchPatientPrescriptions')
         .mockImplementation(() => Promise.reject());
 
       await expect(
-        prescriptionController.searchPrescriptionsForPatient(
-          new GetPrescriptionDto(),
+        prescriptionController.searchPatientPrescriptions(
+          new SearchPrescriptionDTO(),
         ),
       ).rejects.toThrow(InternalServerErrorException);
     });

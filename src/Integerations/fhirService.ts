@@ -10,20 +10,19 @@ import { Injectable } from '@nestjs/common';
 export class FhirService {
   constructor(private httpService: HttpService) {}
   /**
-   * Fetch a specific patient's data from the FHIR API.
+   * Search a specific patient's data from the FHIR API.
    *
    * @param {string} nhi - The nhi of the patient.
-   * @returns {Observable} - An Observable that will emit the patient's data when the HTTP request is successful.
+   * @returns {Observable} - An Observable that will emit the patient prescription data when the HTTP request is successful.
    */
   getPatientPrescriptionRecords(nhi: string) {
     // const url = `https://example.com/fhir/MedicationRequest?subject.identifier={NHI}`;
     // return this.httpService.get(url).pipe(
     //   map((response) => {
-    //     //Check if this record exist in our DB if not create it in our database
     //   }),
     //   catchError((err) => {
     //     throw new HttpException(
-    //       'Error in getting medication request',
+    //       'Error in getting prescriptions',
     //       HttpStatus.INTERNAL_SERVER_ERROR,
     //     );
     //   }),
@@ -31,19 +30,19 @@ export class FhirService {
   }
 
   /**
-   * Create a new medication request in the FHIR API.
+   * Create a new prescription in the FHIR API.
    *
-   * @param {any} medicationRequestData - The data for the new medication request.
+   * @param {any} prescriptionData - The data for the new prescription.
    * @returns {Observable} - An Observable that will emit the response data when the HTTP request is successful.
    * @throws {HttpException} - Throws an exception if an error occurs during the HTTP request.
    */
-  createMedicationRequest(medicationRequestData: any) {
+  createPrescriptionRecord(prescriptionData: any) {
     // const url = 'https://example.com/fhir/MedicationRequest';
-    // return this.httpService.post(url, medicationRequestData).pipe(
+    // return this.httpService.post(url, prescriptionData).pipe(
     //   map((response) => response.data),
     //   catchError((err) => {
     //     throw new HttpException(
-    //       'Error creating medication request',
+    //       'Error while creating prescriptions ',
     //       HttpStatus.INTERNAL_SERVER_ERROR,
     //     );
     //   }),
@@ -51,20 +50,20 @@ export class FhirService {
   }
 
   /**
-   * Update an existing medication request in the FHIR API.
+   * Update an existing prescription in the FHIR API.
    *
-   * @param {string} medicationRequestId - The ID of the medication request to update.
-   * @param {any} updatedData - The new data for the medication request.
+   * @param {string} medicationRequestId - The ID of the prescription to update.
+   * @param {any} updatedData - The new data for the prescription.
    * @returns {Observable} - An Observable that will emit the response data when the HTTP request is successful.
    * @throws {HttpException} - Throws an exception if an error occurs during the HTTP request.
    */
-  updateMedicationRequest(medicationRequestId: string, updatedData: any) {
-    // const url = `https://example.com/fhir/MedicationRequest/${medicationRequestId}`;
+  updatePrescriptionRecord(prescriptionId: string, updatedData: any) {
+    // const url = `https://example.com/fhir/MedicationRequest/${prescriptionId}`;
     // return this.httpService.put(url, updatedData).pipe(
     //   map((response) => response.data),
     //   catchError((err) => {
     //     throw new HttpException(
-    //       'Error updating medication request',
+    //       'Error while updating prescriptions',
     //       HttpStatus.INTERNAL_SERVER_ERROR,
     //     );
     //   }),
@@ -72,14 +71,14 @@ export class FhirService {
   }
 
   /**
-   * Update an existing medication  or create the medication request in the FHIR API.
+   * Update an existing prescription or create the prescription in the FHIR API.
    *
-   * @param {Array<any>} medicationRequests - All Medication Request that we want to sync to third party
+   * @param {Array<any>} prescriptionList - All Prescription that we want to sync to third party
    * @returns {Observable} - An Observable that will emit the response data when the HTTP request is successful.
    * @throws {HttpException} - Throws an exception if an error occurs during the HTTP request.
    */
-  createOrUpdateMedicationRequest(medicationRequests:Array<any>){
-    //here we will iterate the medicationRequest array and will update the medicationRequest record if not
+  upsertPrescriptions(prescriptionList: Array<any>) {
+    //here we will iterate the v array and will update the prescription record if not
     //present in third party then we will create a record
   }
 }

@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreatePrescriptionDto } from './dto/createPrescription.dto';
-import { GetPrescriptionDto } from './dto/getPrescription.dto';
+import { SearchPrescriptionDTO } from './dto/searchPrescription.dto';
 import { PrescriptionService } from './Prescription.service';
 import {
   ApiOperation,
@@ -22,13 +22,13 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import * as _ from 'lodash';
-import { PrescriptionGuard } from '../Guards/Prescription.guard';
-
+import { AuthorizationGuard } from '../Guards/Authorization.guard';
+import { responseFormatter } from '../utils/helper';
 // import { FhirService } from 'src/Integerations/fhirService';
 
 @ApiTags('prescriptions')
 @Controller('prescription')
-@UseGuards(PrescriptionGuard)
+@UseGuards(AuthorizationGuard)
 export class PrescriptionController {
   constructor(
     private readonly prescriptionService: PrescriptionService, // private readonly fhirService: FhirService  //fhirService to Interact with External API
@@ -53,62 +53,55 @@ export class PrescriptionController {
     type: String,
     description: 'NHI number for which we want prescription records',
   })
-  @ApiOperation({ summary: 'Get prescriptions by NHI' })
+  @ApiOperation({ summary: 'Search prescriptions by NHI' })
   @ApiResponse({
     status: 200,
-    description: 'The found record',
+    description: 'Prescription fetched successfully',
     type: [CreatePrescriptionDto],
   })
   @UsePipes(ValidationPipe)
-
   /**
    * This controller method is responsible for fetching the prescription data for a specific patient.
-   * It receives the query parameters through GetPrescriptionDto.
+   * It receives the query parameters through SearchPrescriptionDTO.
    *
-   * @param {GetPrescriptionDto} queryData - The query parameters received from the request.
+   * @param {SearchPrescriptionDTO} queryData - The query parameters received from the request.
    * @returns {Object} responseObj - An object that contains a message and the prescriptions data.
    *
    * @throws {InternalServerErrorException} - Throws an exception if an error occurs during the operation.
    */
-  async searchPrescriptionsForPatient(@Query() queryData: GetPrescriptionDto) {
+  async searchPatientPrescriptions(@Query() queryData: SearchPrescriptionDTO) {
     try {
       // Fetches the prescription data for the patient based on the query parameters
       const prescriptionData =
-        await this.prescriptionService.searchPrescriptionsForPatient(queryData);
+        await this.prescriptionService.searchPatientPrescriptions(queryData);
       // Check if there are any prescriptions for the given NHI otherwise throw error
       if (!_.isEmpty(prescriptionData)) {
         //Sync the External refernece on backgroud, since we doesn't want to wait until the syncing is complete
-        // this.fhirService.createOrUpdateMedicationRequest(prescriptions)
-        return {
-          message: 'Success',
-          data: prescriptionData,
-        };
+        // this.fhirService.upsertPrescriptions(prescriptions)
+        return responseFormatter(prescriptionData);
       }
       //if no record found in our database then fetch it from external API
-      // prescriptionData = await this.fhirService.getPatientPrescriptionRecords(
+      // const externalPrescriptions = await this.fhirService.getPatientPrescriptionRecords(
       //   queryData.nhi,
       // );
 
       //Transform the external API reference data to our system specific data
-      // prescriptionData = this.prescriptionService.transformExternalPrescriptionData(prescriptionData);
+      // prescriptionData = this.prescriptionService.transformExternalPrescriptionData(externalPrescriptions);
 
       //If we have records in prescription data then create in our database and fetch again to get
-      //correct result (our db ids)
+      //correct result (specifically db Ids which will be used to update prescription)
       // if (!_.isEmpty(prescriptionData)) {
-      //   await this.prescriptionService.createOrUpdatePrescriptions(
+      //   await this.prescriptionService.upsertPrescriptions(
       //     prescriptionData,
       //   );
       //   prescriptionData =
-      //     await this.prescriptionService.searchPrescriptionsForPatient(
+      //     await this.prescriptionService.searchPatientPrescriptions(
       //       queryData,
       //     );
       // }
 
       //return response
-      return {
-        message: 'Success',
-        data: prescriptionData,
-      };
+      return responseFormatter(prescriptionData);
 
       // Constructs the response object and return response
     } catch (_err) {
@@ -144,11 +137,8 @@ export class PrescriptionController {
           prescription,
         );
       //Create the Prescription at external reference too in background
-      // this.fhirService.createMedicationRequest(prescription);
-      return {
-        message: 'Success',
-        data: newPrescription,
-      };
+      // this.fhirService.createPrescriptionRecord(prescription);
+      return responseFormatter(newPrescription);
     } catch (_err) {
       throw new InternalServerErrorException(
         'An error occurred while creating the prescription.',
@@ -190,11 +180,8 @@ export class PrescriptionController {
           updatePrescriptionDTO,
         );
       //Update the Prescription at external reference in background
-      // this.fhirService.updateMedicationRequest(_id,updatePrescriptionDTO);
-      return {
-        message: 'Success',
-        data: updatedPrescription,
-      };
+      // this.fhirService.updatePrescriptionRecord(_id,updatePrescriptionDTO);
+      return responseFormatter(updatedPrescription);
     } catch (_err) {
       throw new InternalServerErrorException(
         'An error occurred while updating the prescription.',

@@ -54,6 +54,9 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
+# Lint
+$ npm run lint
+
 # test coverage
 $ npm run test:cov
 ```
@@ -63,6 +66,48 @@ The API documentation is available via Swagger UI. After starting the applicatio
 ```bash
 http://localhost:3000/api/docs
 ```
+## Architecture Diagram
+
+The architecture diagram can be found in the public folder under the name `PrescriptionApiArchitecture.svg`
+
+## Project Structure
+
+markdown
+├── nebler_assignment
+│   ├── node_modules
+│   ├── coverage
+│   ├── dist
+│   ├── public
+│   │   ├── PrescriptionApiArchitecture.svg
+│   ├── src
+│   │   ├── Guards
+│   │   |    ├── Authorization.guard.ts
+│   │   ├── Integrations
+│   │   |    ├── fhirService.ts
+│   │   ├── Middlewares
+│   │   |    ├── Auth.middleware.ts
+│   │   ├── Prescription
+│   │   |    ├── dto
+│   │   |    |   ├── createPrescription.dto.ts
+│   │   |    |   ├── searchPrescription.dto.ts
+│   │   |    ├── Interfaces
+│   │   |    |   ├── prescription.interfaces.ts
+│   │   |    ├── Prescription.controller.ts
+│   │   |    ├── Prescription.module.ts
+│   │   |    ├── Prescription.service.ts
+│   │   |    ├── Prescription.spec.ts
+│   │   ├── Schema
+│   │   |    ├── Prescription.schema.ts
+│   │   ├── utils
+│   │   |    ├── constant.ts
+│   │   |    ├── helper.ts
+│   │   ├── app.module.ts
+│   │   ├── main.ts
+│   │   ├── nest-cli.json
+│   │   ├── tsconfig.build.json
+│   │   ├── tsconfig.json
+│   │   ├── package.json
+│   │   ├── package-lock.json
 
 ## Important points:
   ### How do we verify that the calls should be allowed?
@@ -71,23 +116,22 @@ http://localhost:3000/api/docs
   
   #### Authentication
   
-  Authentication verifies the identity of the user making the API call. Various methods can be used for authentication, such as:
+    Authentication verifies the identity of the user making the API call. Various methods can be used for authentication, such as:
   
   - **JWT (JSON Web Tokens):** A compact and self-contained method for securely transmitting information between parties as a JSON object.
   
   - **OAuth:** A protocol that allows users to grant limited access to their resources on one site, to another site, without having to expose their credentials.
   
   #### Authorization
-    Authorization is the process of granting or denying access to specific resources. With authorization, we can set up privileges to control which users have       access to which resources.
+    Authorization is the process of granting or denying access to specific resources. With authorization, we can set up privileges to control which users have access to which resources.
   
   ### What is the best strategy to keep our database and the external API in sync?
-    We can set up a daily cron job to retrieve patient prescription data from the external source. This job will import the data into our database, adding new       records as needed and updating existing ones if changes are detected at the source
+    We will set up a daily cron job to retrieve patient prescription data from the external source. This job will import the data into our database, adding new records as needed and updating existing ones if changes are detected at the source.
   ### How can we minimize the impact of changes in the external API on our system?
-   We can create an abstraction layer between the external API and your application. This layer will interact with the external API and normalize the data           before passing it to your application. If the API changes, we only need to update this layer. Also, we need to make our service loosely coupled with     
-    External API.
+    An abstraction layer will be added between the external API and your application. This layer will interact with the external API and normalize the data before passing it to your application. If the API changes, we only need to update this layer. Also, we will make our service loosely coupled with External API.
   ### How do we test the system works as expected with good inputs and fails as expected with malicious inputs?
-  We can use testing utilities and libraries to ensure that your system behaves as expected with valid inputs and fails as expected with malicious inputs.
-  Every API will be guarded with the Input validator and we can write Unit Test cases to check all scenarios.
+    We are using testing utilities and libraries to ensure that your system behaves as expected with valid inputs and fails as expected with malicious inputs.
+    Every API will be guarded with the Input validator and we will write Unit Test cases to check all scenarios.
 
 ## Support
 

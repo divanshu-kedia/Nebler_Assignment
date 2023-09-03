@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetPrescriptionDto {
+export class SearchPrescriptionDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

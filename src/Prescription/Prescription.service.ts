@@ -5,10 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { GetPrescriptionDto } from './dto/getPrescription.dto';
+import { SearchPrescriptionDTO } from './dto/searchPrescription.dto';
 import { IPrescription } from './Interfaces/prescription.interfaces';
 import { CreatePrescriptionDto } from './dto/createPrescription.dto';
-import { Prescription } from 'src/Schema/Prescription.schema';
+import { Prescription } from '../Schema/Prescription.schema';
+import { PAGINATION_CONSTANT } from '../utils/constant';
 @Injectable()
 export class PrescriptionService {
   constructor(
@@ -20,15 +21,22 @@ export class PrescriptionService {
    * Fetches prescriptions for a specific patient from the database.
    * The number of prescriptions returned and the page number are defined in the payload.
    *
-   * @param {GetPrescriptionDto} payload - The query parameters for fetching the prescriptions.
+   * @param {SearchPrescriptionDTO} payload - The query parameters for fetching the prescriptions.
    * @throws {NotFoundException} - Throws an exception if no prescriptions are found for the given NHI.
    * @returns {Promise<Array<IPrescription>>} - A promise that resolves to an array of prescriptions.
    */
-  async searchPrescriptionsForPatient(
-    payload: GetPrescriptionDto,
+  async searchPatientPrescriptions(
+    payload: SearchPrescriptionDTO,
   ): Promise<Array<IPrescription>> {
     try {
-      const { nhi, size = 10, page = 1 } = payload; // Default values for size and page if not provided
+      const { nhi, page = PAGINATION_CONSTANT.DEFAULT_PAGE } = payload; // Default values for size and page if not provided
+
+      let { size = PAGINATION_CONSTANT.DEFAULT_SIZE } = payload;
+
+      //restricting to a max size that we allow
+      if (size > PAGINATION_CONSTANT.MAX_SIZE) {
+        size = PAGINATION_CONSTANT.MAX_SIZE;
+      }
 
       // Fetching prescriptions from the database based on the patient's NHI
       const prescriptions = await this.prescriptionModel
@@ -115,9 +123,7 @@ export class PrescriptionService {
    * @param {Array<CreatePrescriptionDto>} prescriptions - The array of prescription DTOs to create or update.
    * @return {Promise<any>} A promise that resolves with the result of the bulkWrite operation.
    */
-  async createOrUpdatePrescriptions(
-    prescriptions: Array<CreatePrescriptionDto>,
-  ) {
+  async upsertPrescriptions(prescriptions: Array<CreatePrescriptionDto>) {
     // Map over the array of prescriptions, creating an array of updateOne operations.
     const operations = prescriptions.map((prescription) => ({
       updateOne: {
