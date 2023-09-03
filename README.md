@@ -73,6 +73,7 @@ The architecture diagram can be found in the public folder under the name `Presc
 ## Project Structure
 
 markdown
+```
 ├── nebler_assignment
 │   ├── node_modules
 │   ├── coverage
@@ -81,33 +82,35 @@ markdown
 │   │   ├── PrescriptionApiArchitecture.svg
 │   ├── src
 │   │   ├── Guards
-│   │   |    ├── Authorization.guard.ts
+│   │   |    └── Authorization.guard.ts
 │   │   ├── Integrations
-│   │   |    ├── fhirService.ts
+│   │   |    └── fhirService.ts
 │   │   ├── Middlewares
-│   │   |    ├── Auth.middleware.ts
+│   │   |    └── Auth.middleware.ts
 │   │   ├── Prescription
 │   │   |    ├── dto
 │   │   |    |   ├── createPrescription.dto.ts
-│   │   |    |   ├── searchPrescription.dto.ts
+│   │   |    |   └──searchPrescription.dto.ts
 │   │   |    ├── Interfaces
-│   │   |    |   ├── prescription.interfaces.ts
+│   │   |    |   └── prescription.interfaces.ts
 │   │   |    ├── Prescription.controller.ts
 │   │   |    ├── Prescription.module.ts
 │   │   |    ├── Prescription.service.ts
-│   │   |    ├── Prescription.spec.ts
+│   │   |    └── Prescription.spec.ts
 │   │   ├── Schema
-│   │   |    ├── Prescription.schema.ts
+│   │   |    └──Prescription.schema.ts
 │   │   ├── utils
-│   │   |    ├── constant.ts
-│   │   |    ├── helper.ts
+│   │   |    └── constant.ts
+│   │   |    └──helper.ts
 │   │   ├── app.module.ts
 │   │   ├── main.ts
 │   │   ├── nest-cli.json
 │   │   ├── tsconfig.build.json
 │   │   ├── tsconfig.json
 │   │   ├── package.json
-│   │   ├── package-lock.json
+│   │   └──package-lock.json
+
+```
 
 ## Important points:
   ### How do we verify that the calls should be allowed?
