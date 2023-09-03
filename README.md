@@ -108,7 +108,7 @@ markdown
 │   │   ├── tsconfig.build.json
 │   │   ├── tsconfig.json
 │   │   ├── package.json
-│   │   └──package-lock.json
+└───└───────package-lock.json
 
 ```
 
