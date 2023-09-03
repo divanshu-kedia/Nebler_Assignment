@@ -72,7 +72,6 @@ The architecture diagram can be found in the public folder under the name `Presc
 
 ## Project Structure
 
-markdown
 ```
 ├── nebler_assignment
 │   ├── node_modules
