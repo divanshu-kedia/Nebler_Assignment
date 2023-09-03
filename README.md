@@ -22,9 +22,12 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Nebler Prescription CRUD operation
+This task is for creating node API loosely based on FHIR (http://hl7.org/fhir/) which is a healthcare interoperability framework. A part of this API is a prescription resource that allows us to manage viewing and editing prescriptions.
+- Search for prescriptions based on a unique ID called “nhi”
+(https://www.health.govt.nz/our-work/health-identity/national-health-index)
+- Add a new prescription
+- Edit an existing prescription
 
 ## Installation
 
@@ -51,16 +54,90 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
+# Lint
+$ npm run lint
 
 # test coverage
 $ npm run test:cov
 ```
+## API Reference
+
+The API documentation is available via Swagger UI. After starting the application, you can view the Swagger UI and interact with the API by navigating to:
+```bash
+http://localhost:3000/api/docs
+```
+## Architecture Diagram
+
+The architecture diagram can be found in the public folder under the name `PrescriptionApiArchitecture.svg`
+
+## Project Structure
+
+```
+├── nebler_assignment
+│   ├── node_modules
+│   ├── coverage
+│   ├── dist
+│   ├── public
+│   │   ├── PrescriptionApiArchitecture.svg
+│   ├── src
+│   │   ├── Guards
+│   │   |    └── Authorization.guard.ts
+│   │   ├── Integrations
+│   │   |    └── fhirService.ts
+│   │   ├── Middlewares
+│   │   |    └── Auth.middleware.ts
+│   │   ├── Prescription
+│   │   |    ├── dto
+│   │   |    |   ├── createPrescription.dto.ts
+│   │   |    |   └──searchPrescription.dto.ts
+│   │   |    ├── Interfaces
+│   │   |    |   └── prescription.interfaces.ts
+│   │   |    ├── Prescription.controller.ts
+│   │   |    ├── Prescription.module.ts
+│   │   |    ├── Prescription.service.ts
+│   │   |    └── Prescription.spec.ts
+│   │   ├── Schema
+│   │   |    └──Prescription.schema.ts
+│   │   ├── utils
+│   │   |    └── constant.ts
+│   │   |    └──helper.ts
+│   │   ├── app.module.ts
+│   │   ├── main.ts
+│   │   ├── nest-cli.json
+│   │   ├── tsconfig.build.json
+│   │   ├── tsconfig.json
+│   │   ├── package.json
+└───└───────package-lock.json
+
+```
+
+## Important points:
+  ### How do we verify that the calls should be allowed?
+  
+  To ensure the security of our API, we implement both authentication and authorization mechanisms:
+  
+  #### Authentication
+  
+    Authentication verifies the identity of the user making the API call. Various methods can be used for authentication, such as:
+  
+  - **JWT (JSON Web Tokens):** A compact and self-contained method for securely transmitting information between parties as a JSON object.
+  
+  - **OAuth:** A protocol that allows users to grant limited access to their resources on one site, to another site, without having to expose their credentials.
+  
+  #### Authorization
+    Authorization is the process of granting or denying access to specific resources. With authorization, we can set up privileges to control which users have access to which resources.
+  
+  ### What is the best strategy to keep our database and the external API in sync?
+    We will set up a daily cron job to retrieve patient prescription data from the external source. This job will import the data into our database, adding new records as needed and updating existing ones if changes are detected at the source.
+  ### How can we minimize the impact of changes in the external API on our system?
+    An abstraction layer will be added between the external API and your application. This layer will interact with the external API and normalize the data before passing it to your application. If the API changes, we only need to update this layer. Also, we will make our service loosely coupled with External API.
+  ### How do we test the system works as expected with good inputs and fails as expected with malicious inputs?
+    We are using testing utilities and libraries to ensure that your system behaves as expected with valid inputs and fails as expected with malicious inputs.
+    Every API will be guarded with the Input validator and we will write Unit Test cases to check all scenarios.
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Nest is an MIT-licensed open-source project. It can grow thanks to the sponsors and support of the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 

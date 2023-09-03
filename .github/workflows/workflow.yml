@@ -1,0 +1,29 @@
+name: Lint and Unit Test cases verification
+on:
+  push:
+    branches:
+      - "develop"
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: develop
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - run: npm ci
+      
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
